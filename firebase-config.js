@@ -22,7 +22,7 @@ const FIREBASE_CONFIG = {
 //  ADMIN CONFIG — ganti dengan email kamu!
 // ════════════════════════════════════════════════════════
 const ADMIN_EMAILS = [
-  // "emailkamu@gmail.com",  // ← hapus tanda // dan isi email admin
+  // "creeppermoment@gmail.com",  // ← hapus tanda // dan isi email admin
 ];
 
 // ════════════════════════════════════════════════════════
