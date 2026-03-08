@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LunaStore — Premium Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue-950: #050F2C;
+      --blue-900: #0A1F5C;
+      --blue-800: #0F2F8A;
+      --blue-700: #1A3FBF;
+      --blue-600: #2553E8;
+      --blue-500: #3B6BFF;
+      --blue-400: #6B8FFF;
+      --blue-300: #A0B8FF;
+      --blue-100: #E8EEFF;
+      --blue-50:  #F2F5FF;
+      --gold:     #C9A84C;
+      --gold-light: #F5D78E;
+      --red:      #E53E5E;
+      --green:    #0CB87C;
+
+      --bg:       #F4F6FF;
+      --bg2:      #FFFFFF;
+      --bg3:      #EDF0FF;
+      --surface:  #FFFFFF;
+      --border:   #D6DCFF;
+      --text:     #0B1440;
+      --text2:    #4A5480;
+      --text3:    #8892BB;
+      --shadow:   0 4px 24px rgba(37,83,232,0.10);
+      --shadow-lg:0 12px 48px rgba(37,83,232,0.16);
+      --radius:   16px;
+      --radius-sm:10px;
+    }
+
+    [data-theme="dark"] {
+      --bg:       #060C22;
+      --bg2:      #0C1636;
+      --bg3:      #101D44;
+      --surface:  #111D48;
+      --border:   #1E2F6A;
+      --text:     #EDF0FF;
+      --text2:    #A0AEDD;
+      --text3:    #5A6A9A;
+      --shadow:   0 4px 24px rgba(0,0,0,0.40);
+      --shadow-lg:0 12px 48px rgba(0,0,0,0.55);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.35s, color 0.35s;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--blue-400); border-radius: 99px; }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+    .nav-inner {
+      max-width: 1380px; margin: 0 auto;
+      padding: 0 28px;
+      height: 68px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.55rem; font-weight: 700;
+      color: var(--blue-600);
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none;
+    }
+    .logo-dot { color: var(--gold); }
+    .nav-links {
+      display: flex; gap: 4px; margin-left: 18px;
+    }
+    .nav-links a {
+      font-size: 0.9rem; font-weight: 500;
+      color: var(--text2);
+      text-decoration: none;
+      padding: 7px 14px; border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--blue-600);
+      background: var(--blue-100);
+    }
+    [data-theme="dark"] .nav-links a:hover,
+    [data-theme="dark"] .nav-links a.active {
+      background: var(--bg3);
+    }
+    .nav-search {
+      flex: 1; position: relative; max-width: 380px; margin-left: auto;
+    }
+    .nav-search input {
+      width: 100%; padding: 9px 16px 9px 40px;
+      border: 1.5px solid var(--border);
+      border-radius: 99px;
+      background: var(--bg3);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .nav-search input:focus {
+      border-color: var(--blue-500);
+      box-shadow: 0 0 0 3px rgba(59,107,255,0.15);
+    }
+    .nav-search input::placeholder { color: var(--text3); }
+    .search-icon {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      color: var(--text3); pointer-events: none;
+    }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .btn-icon {
+      width: 40px; height: 40px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%; background: var(--bg3);
+      color: var(--text2);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.1rem;
+      transition: all 0.2s; position: relative;
+    }
+    .btn-icon:hover { border-color: var(--blue-500); color: var(--blue-600); background: var(--blue-100); }
+    [data-theme="dark"] .btn-icon:hover { background: var(--bg3); }
+    .badge {
+      position: absolute; top: -4px; right: -4px;
+      background: var(--red); color: #fff;
+      font-size: 0.65rem; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--bg2);
+    }
+    .btn-login {
+      padding: 8px 20px; border-radius: 99px;
+      background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+      color: #fff; font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; font-weight: 600;
+      border: none; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(59,107,255,0.35);
+      transition: all 0.2s;
+    }
+    .btn-login:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,107,255,0.45); }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-700) 60%, var(--blue-500) 100%);
+      padding: 80px 28px 90px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 70% at 80% 50%, rgba(59,107,255,0.4) 0%, transparent 70%),
+                  url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-inner {
+      max-width: 1380px; margin: 0 auto; position: relative;
+      display: flex; align-items: center; justify-content: space-between; gap: 40px;
+    }
+    .hero-text { flex: 1; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 99px; padding: 6px 16px;
+      font-size: 0.8rem; font-weight: 600; color: var(--gold-light);
+      letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 700; color: #fff;
+      line-height: 1.15; margin-bottom: 18px;
+    }
+    .hero h1 span { color: var(--gold-light); }
+    .hero p {
+      color: rgba(255,255,255,0.75); font-size: 1.05rem;
+      line-height: 1.7; max-width: 480px; margin-bottom: 32px;
+    }
+    .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      padding: 13px 30px; border-radius: 99px;
+      background: #fff; color: var(--blue-800);
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700;
+      border: none; cursor: pointer;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+      transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .btn-outline-white {
+      padding: 13px 28px; border-radius: 99px;
+      background: transparent; color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600;
+      border: 1.5px solid rgba(255,255,255,0.4); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-outline-white:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.7); }
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 40px; flex-wrap: wrap;
+    }
+    .hero-stat { text-align: left; }
+    .hero-stat .num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: #fff; }
+    .hero-stat .lbl { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 2px; }
+    .hero-visual {
+      flex-shrink: 0; width: 340px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .hero-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 14px; padding: 16px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-card:first-child { grid-column: 1 / -1; }
+    .hero-card-img {
+      width: 100%; aspect-ratio: 16/10;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+      border-radius: 10px; margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem;
+    }
+    .hero-card .prod-name { font-size: 0.82rem; color: rgba(255,255,255,0.9); font-weight: 500; }
+    .hero-card .prod-price { font-size: 0.95rem; color: var(--gold-light); font-weight: 700; margin-top: 4px; }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main { max-width: 1380px; margin: 0 auto; padding: 48px 28px 80px; }
+
+    /* ─── SECTION HEADER ─── */
+    .section-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.65rem; font-weight: 700; color: var(--text);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title::after {
+      content: '';
+      display: inline-block; width: 36px; height: 3px;
+      background: linear-gradient(90deg, var(--blue-500), var(--blue-300));
+      border-radius: 99px; margin-left: 4px; margin-bottom: 5px;
+    }
+    .see-all {
+      color: var(--blue-500); font-size: 0.88rem; font-weight: 600;
+      text-decoration: none; display: flex; align-items: center; gap: 4px;
+      transition: gap 0.2s;
+    }
+    .see-all:hover { gap: 8px; }
+
+    /* ─── CATEGORY PILLS ─── */
+    .categories { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 36px; }
+    .cat-pill {
+      padding: 8px 20px; border-radius: 99px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text2); font-size: 0.875rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .cat-pill:hover { border-color: var(--blue-400); color: var(--blue-600); }
+    .cat-pill.active {
+      background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+      border-color: transparent; color: #fff;
+      box-shadow: 0 4px 16px rgba(59,107,255,0.35);
+    }
+
+    /* ─── SORT BAR ─── */
+    .sort-bar {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px; flex-wrap: wrap;
+    }
+    .sort-label { font-size: 0.88rem; color: var(--text2); font-weight: 500; }
+    .sort-btn {
+      padding: 7px 16px; border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--text2);
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .sort-btn:hover { border-color: var(--blue-400); color: var(--blue-600); }
+    .sort-btn.active {
+      background: var(--blue-600); border-color: var(--blue-600);
+      color: #fff; box-shadow: 0 3px 12px rgba(59,107,255,0.3);
+    }
+    .result-count { margin-left: auto; font-size: 0.85rem; color: var(--text3); }
+
+    /* ─── PRODUCT GRID ─── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 22px;
+    }
+
+    /* ─── PRODUCT CARD ─── */
+    .product-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all 0.3s cubic-bezier(.22,.68,0,1.2);
+      cursor: pointer; position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--blue-300);
+    }
+    .product-card:hover .card-actions { opacity: 1; transform: translateY(0); }
+    .product-img-wrap {
+      position: relative; overflow: hidden;
+      background: var(--bg3);
+      aspect-ratio: 1/1;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+    }
+    .product-img-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--bg3), var(--bg2));
+    }
+    .product-emoji { position: relative; z-index: 1; }
+    .product-badges {
+      position: absolute; top: 12px; left: 12px;
+      display: flex; flex-direction: column; gap: 5px; z-index: 2;
+    }
+    .badge-tag {
+      padding: 3px 10px; border-radius: 6px;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3px;
+    }
+    .badge-hot { background: var(--red); color: #fff; }
+    .badge-new { background: var(--green); color: #fff; }
+    .badge-sale { background: var(--gold); color: #1a1000; }
+    .badge-top { background: var(--blue-600); color: #fff; }
+    .wishlist-btn {
+      position: absolute; top: 12px; right: 12px; z-index: 2;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--bg2); border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1rem;
+      transition: all 0.2s; color: var(--text3);
+    }
+    .wishlist-btn:hover, .wishlist-btn.active { color: var(--red); border-color: var(--red); transform: scale(1.1); }
+    .card-actions {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(0deg, rgba(0,0,0,0.5), transparent);
+      padding: 12px;
+      opacity: 0; transform: translateY(10px);
+      transition: all 0.25s;
+      display: flex; gap: 8px; z-index: 2;
+    }
+    .card-body { padding: 16px 16px 18px; }
+    .product-category-small { font-size: 0.72rem; color: var(--text3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .product-name {
+      font-size: 0.95rem; font-weight: 600; color: var(--text);
+      line-height: 1.4; margin-bottom: 8px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .product-rating { display: flex; align-items: center; gap: 5px; margin-bottom: 10px; }
+    .stars { color: var(--gold); font-size: 0.8rem; letter-spacing: 1px; }
+    .rating-num { font-size: 0.8rem; color: var(--text3); }
+    .rating-count { font-size: 0.75rem; color: var(--text3); }
+    .product-price-row { display: flex; align-items: baseline; justify-content: space-between; }
+    .product-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: var(--blue-600);
+    }
+    .product-price-old {
+      font-size: 0.8rem; color: var(--text3);
+      text-decoration: line-through; margin-left: 6px;
+    }
+    .product-sold { font-size: 0.75rem; color: var(--text3); }
+    .btn-add-cart {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+      color: #fff; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(59,107,255,0.35);
+      transition: all 0.2s;
+    }
+    .btn-add-cart:hover { transform: scale(1.1); }
+
+    /* ─── BANNER STRIP ─── */
+    .banner-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+      margin: 52px 0;
+    }
+    .banner-card {
+      border-radius: var(--radius);
+      padding: 28px 24px; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .banner-card::before {
+      content: ''; position: absolute;
+      width: 180px; height: 180px; border-radius: 50%;
+      opacity: 0.12; top: -40px; right: -40px;
+      background: #fff;
+    }
+    .banner-card-1 { background: linear-gradient(135deg, #0F2F8A, #2553E8); }
+    .banner-card-2 { background: linear-gradient(135deg, #7B2FBE, #C44DCA); }
+    .banner-card-3 { background: linear-gradient(135deg, #C9A84C, #E86C25); }
+    .banner-icon { font-size: 2.2rem; margin-bottom: 4px; }
+    .banner-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: #fff; }
+    .banner-desc { font-size: 0.82rem; color: rgba(255,255,255,0.8); line-height: 1.5; }
+    .banner-link {
+      margin-top: 6px; font-size: 0.82rem; font-weight: 700;
+      color: rgba(255,255,255,0.9); text-decoration: none;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* ─── FEATURES ─── */
+    .features {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+      margin-bottom: 52px;
+    }
+    .feature-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 20px;
+      display: flex; align-items: flex-start; gap: 14px;
+      transition: all 0.2s;
+    }
+    .feature-card:hover { border-color: var(--blue-400); transform: translateY(-2px); }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--blue-100); color: var(--blue-600);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    [data-theme="dark"] .feature-icon { background: var(--bg3); }
+    .feature-title { font-weight: 600; font-size: 0.9rem; color: var(--text); margin-bottom: 4px; }
+    .feature-desc { font-size: 0.8rem; color: var(--text3); line-height: 1.5; }
+
+    /* ─── MODAL OVERLAY ─── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(5,15,44,0.7); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 20px; max-width: 640px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 24px 80px rgba(5,15,44,0.5);
+      animation: modalIn 0.3s cubic-bezier(.22,.68,0,1.2);
+    }
+    @keyframes modalIn { from { opacity:0; transform: scale(0.92) translateY(20px); } to { opacity:1; transform: scale(1) translateY(0); } }
+    .modal-header {
+      padding: 24px 24px 0;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .modal-close {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--bg3); border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.1rem; color: var(--text2);
+      transition: all 0.2s;
+    }
+    .modal-close:hover { background: var(--red); color: #fff; border-color: var(--red); }
+    .modal-body { padding: 20px 24px 28px; }
+    .modal-img-wrap {
+      width: 100%; aspect-ratio: 16/9;
+      background: var(--bg3); border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 6rem; margin-bottom: 20px;
+    }
+    .modal-price-row { display: flex; align-items: baseline; gap: 10px; margin: 10px 0 18px; }
+    .modal-price { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--blue-600); }
+    .modal-price-old { font-size: 1rem; color: var(--text3); text-decoration: line-through; }
+    .modal-desc { font-size: 0.92rem; color: var(--text2); line-height: 1.7; margin-bottom: 18px; }
+    .modal-meta { display: flex; gap: 24px; margin-bottom: 18px; }
+    .meta-item { font-size: 0.85rem; }
+    .meta-label { color: var(--text3); display: block; margin-bottom: 2px; }
+    .meta-val { color: var(--text); font-weight: 600; }
+    .review-section { border-top: 1.5px solid var(--border); padding-top: 18px; margin-top: 18px; }
+    .review-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 14px; }
+    .review-item { display: flex; gap: 12px; margin-bottom: 14px; }
+    .review-avatar {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--blue-400), var(--blue-600));
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 0.85rem;
+    }
+    .review-name { font-size: 0.85rem; font-weight: 600; }
+    .review-text { font-size: 0.82rem; color: var(--text2); margin-top: 3px; line-height: 1.5; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .btn-cart-full {
+      flex: 1; padding: 13px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+      color: #fff; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700;
+      box-shadow: 0 6px 20px rgba(59,107,255,0.35);
+      transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-cart-full:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(59,107,255,0.45); }
+    .btn-wishlist-full {
+      width: 50px; height: 50px; border-radius: 12px;
+      background: var(--bg3); border: 1.5px solid var(--border);
+      color: var(--text2); cursor: pointer; font-size: 1.3rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn-wishlist-full:hover { color: var(--red); border-color: var(--red); }
+
+    /* ─── CART SIDEBAR ─── */
+    .cart-sidebar {
+      position: fixed; right: 0; top: 0; bottom: 0; z-index: 200;
+      width: 380px; background: var(--surface);
+      border-left: 1.5px solid var(--border);
+      box-shadow: -8px 0 48px rgba(5,15,44,0.2);
+      display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.35s cubic-bezier(.22,.68,0,1.2);
+    }
+    .cart-sidebar.open { transform: translateX(0); }
+    .cart-header {
+      padding: 22px 22px 18px;
+      border-bottom: 1.5px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .cart-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; }
+    .cart-body { flex: 1; overflow-y: auto; padding: 16px 22px; }
+    .cart-empty { text-align: center; padding: 60px 0; color: var(--text3); }
+    .cart-empty .cart-empty-icon { font-size: 3.5rem; margin-bottom: 12px; }
+    .cart-item { display: flex; gap: 14px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .cart-item-img {
+      width: 64px; height: 64px; border-radius: 10px;
+      background: var(--bg3); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
+    }
+    .cart-item-name { font-size: 0.88rem; font-weight: 600; color: var(--text); line-height: 1.4; }
+    .cart-item-price { font-size: 0.88rem; color: var(--blue-500); font-weight: 700; margin-top: 4px; }
+    .cart-item-qty { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+    .qty-btn { width: 26px; height: 26px; border-radius: 6px; border: 1.5px solid var(--border); background: var(--bg3); color: var(--text); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .qty-btn:hover { border-color: var(--blue-500); color: var(--blue-600); }
+    .qty-num { font-weight: 700; font-size: 0.9rem; min-width: 20px; text-align: center; }
+    .cart-remove { margin-left: auto; align-self: flex-start; color: var(--text3); cursor: pointer; font-size: 1.1rem; transition: color 0.2s; }
+    .cart-remove:hover { color: var(--red); }
+    .cart-footer { padding: 16px 22px 22px; border-top: 1.5px solid var(--border); }
+    .cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .cart-total-label { font-size: 0.9rem; color: var(--text2); }
+    .cart-total-val { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--blue-600); }
+    .btn-checkout {
+      width: 100%; padding: 14px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+      color: #fff; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700;
+      box-shadow: 0 6px 20px rgba(59,107,255,0.35); transition: all 0.2s;
+    }
+    .btn-checkout:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(59,107,255,0.45); }
+
+    /* ─── TOAST ─── */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 12px 18px;
+      box-shadow: var(--shadow-lg); font-size: 0.88rem;
+      display: flex; align-items: center; gap: 10px; color: var(--text);
+      animation: toastIn 0.3s cubic-bezier(.22,.68,0,1.2);
+      max-width: 300px;
+    }
+    @keyframes toastIn { from { opacity:0; transform: translateY(20px) scale(0.9); } to { opacity:1; transform: translateY(0) scale(1); } }
+    .toast.success { border-left: 4px solid var(--green); }
+    .toast.info { border-left: 4px solid var(--blue-500); }
+
+    /* ─── LOGIN MODAL ─── */
+    .login-tabs { display: flex; border-bottom: 1.5px solid var(--border); margin-bottom: 20px; }
+    .login-tab {
+      flex: 1; padding: 12px; text-align: center;
+      font-weight: 600; font-size: 0.9rem; cursor: pointer;
+      color: var(--text3); border-bottom: 2px solid transparent;
+      transition: all 0.2s; margin-bottom: -1.5px;
+    }
+    .login-tab.active { color: var(--blue-600); border-bottom-color: var(--blue-600); }
+    .form-group { margin-bottom: 16px; }
+    .form-label { font-size: 0.82rem; font-weight: 600; color: var(--text2); display: block; margin-bottom: 7px; }
+    .form-input {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      background: var(--bg3); color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus { border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(59,107,255,0.12); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg2); border-top: 1.5px solid var(--border);
+      padding: 52px 28px 32px;
+    }
+    .footer-inner { max-width: 1380px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand .logo { font-size: 1.4rem; }
+    .footer-tagline { font-size: 0.85rem; color: var(--text3); line-height: 1.6; margin-top: 12px; max-width: 260px; }
+    .footer-heading { font-weight: 700; font-size: 0.9rem; color: var(--text); margin-bottom: 16px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 0.85rem; color: var(--text3); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--blue-500); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-size: 0.82rem; color: var(--text3); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .hero-visual { display: none; }
+      .banner-strip { grid-template-columns: 1fr; }
+      .features { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .hero { padding: 50px 20px 60px; }
+      .features { grid-template-columns: 1fr; }
+      .main { padding: 32px 16px 60px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .cart-sidebar { width: 100%; }
+    }
+
+    /* ─── SKELETON LOADING ─── */
+    .skeleton { background: linear-gradient(90deg, var(--bg3) 25%, var(--border) 50%, var(--bg3) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ─── SCROLL TO TOP ─── */
+    .scroll-top {
+      position: fixed; bottom: 80px; right: 24px; z-index: 90;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--blue-600); color: #fff;
+      border: none; cursor: pointer; font-size: 1.1rem;
+      box-shadow: 0 4px 16px rgba(59,107,255,0.4);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: translateY(10px);
+      transition: all 0.3s;
+    }
+    .scroll-top.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── OVERLAY (cart backdrop) ─── */
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0; z-index: 199;
+      background: rgba(5,15,44,0.5); backdrop-filter: blur(4px);
+    }
+    .sidebar-overlay.open { display: block; }
+
+    /* ─── RATING STARS INPUT ─── */
+    .stars-input { display: flex; gap: 4px; font-size: 1.4rem; cursor: pointer; }
+    .stars-input span { color: var(--border); transition: color 0.15s; }
+    .stars-input span.filled { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">Luna<span class="logo-dot">·</span>Store</a>
+    <div class="nav-links">
+      <a href="#" class="active">Beranda</a>
+      <a href="#">Produk</a>
+      <a href="#">Promo</a>
+      <a href="#">Tentang</a>
+    </div>
+    <div class="nav-search">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Cari produk premium…" oninput="filterProducts()" />
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" onclick="toggleTheme()" title="Toggle tema" id="themeBtn">🌙</button>
+      <button class="btn-icon" onclick="openCart()" title="Keranjang">
+        🛒<span class="badge" id="cartBadge" style="display:none">0</span>
+      </button>
+      <button class="btn-icon" title="Wishlist" onclick="showWishlistToast()">🤍</button>
+      <button class="btn-login" onclick="openLoginModal()">Masuk</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">⭐ Platform Belanja #1 Indonesia</div>
+      <h1>Belanja <span>Premium</span><br>Harga Terbaik</h1>
+      <p>Ribuan produk pilihan berkualitas tinggi dengan jaminan keaslian, pengiriman cepat, dan layanan pelanggan 24/7.</p>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="scrollToProducts()">🛍️ Mulai Belanja</button>
+        <button class="btn-outline-white" onclick="openLoginModal()">Daftar Gratis →</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">50K+</div><div class="lbl">Produk</div></div>
+        <div class="hero-stat"><div class="num">200K+</div><div class="lbl">Pelanggan</div></div>
+        <div class="hero-stat"><div class="num">4.9★</div><div class="lbl">Rating</div></div>
+        <div class="hero-stat"><div class="num">99%</div><div class="lbl">Kepuasan</div></div>
+      </div>
+    </div>
+    <div class="hero-visual" id="heroVisual"></div>
+  </div>
+</section>
+
+<!-- ─── FEATURES STRIP ─── -->
+<div class="main" style="padding-bottom:0;padding-top:32px;">
+  <div class="features">
+    <div class="feature-card"><div class="feature-icon">🚚</div><div><div class="feature-title">Gratis Ongkir</div><div class="feature-desc">Ke seluruh Indonesia tanpa minimum belanja</div></div></div>
+    <div class="feature-card"><div class="feature-icon">🔒</div><div><div class="feature-title">Pembayaran Aman</div><div class="feature-desc">Enkripsi SSL & proteksi buyer 100%</div></div></div>
+    <div class="feature-card"><div class="feature-icon">↩️</div><div><div class="feature-title">Retur Mudah</div><div class="feature-desc">30 hari retur gratis tanpa pertanyaan</div></div></div>
+    <div class="feature-card"><div class="feature-icon">🎁</div><div><div class="feature-title">Hadiah Loyalty</div><div class="feature-desc">Kumpulkan poin & tukar dengan diskon eksklusif</div></div></div>
+  </div>
+</div>
+
+<!-- ─── MAIN CONTENT ─── -->
+<main class="main" id="productsSection">
+
+  <!-- Categories -->
+  <div class="section-header"><h2 class="section-title">Semua Produk</h2><a href="#" class="see-all">Lihat semua →</a></div>
+  <div class="categories" id="categoryPills"></div>
+
+  <!-- Sort bar -->
+  <div class="sort-bar">
+    <span class="sort-label">Urutkan:</span>
+    <button class="sort-btn active" onclick="sortProducts('default', this)">✨ Semua</button>
+    <button class="sort-btn" onclick="sortProducts('terlaris', this)">🔥 Terlaris</button>
+    <button class="sort-btn" onclick="sortProducts('terpopuler', this)">⭐ Terpopuler</button>
+    <button class="sort-btn" onclick="sortProducts('termurah', this)">💰 Termurah</button>
+    <button class="sort-btn" onclick="sortProducts('termahal', this)">💎 Termahal</button>
+    <button class="sort-btn" onclick="sortProducts('terbaru', this)">🆕 Terbaru</button>
+    <span class="result-count" id="resultCount"></span>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid" id="productsGrid"></div>
+
+  <!-- Promotional Banners -->
+  <div class="banner-strip">
+    <div class="banner-card banner-card-1">
+      <div class="banner-icon">⚡</div>
+      <div class="banner-title">Flash Sale Hari Ini</div>
+      <div class="banner-desc">Diskon hingga 70% untuk produk pilihan. Berakhir dalam 3 jam!</div>
+      <a href="#" class="banner-link">Lihat promo →</a>
+    </div>
+    <div class="banner-card banner-card-2">
+      <div class="banner-icon">💜</div>
+      <div class="banner-title">Member Eksklusif</div>
+      <div class="banner-desc">Daftar gratis dan dapatkan voucher Rp150.000 untuk pembelian pertama.</div>
+      <a href="#" class="banner-link">Daftar sekarang →</a>
+    </div>
+    <div class="banner-card banner-card-3">
+      <div class="banner-icon">🏆</div>
+      <div class="banner-title">Brand Premium</div>
+      <div class="banner-desc">Koleksi brand internasional original dengan garansi resmi 2 tahun.</div>
+      <a href="#" class="banner-link">Jelajahi →</a>
+    </div>
+  </div>
+
+</main>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">Luna<span class="logo-dot">·</span>Store</div>
+        <p class="footer-tagline">Platform belanja premium Indonesia dengan ribuan produk berkualitas dan pengalaman berbelanja kelas dunia.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Belanja</div>
+        <ul class="footer-links">
+          <li><a href="#">Produk Baru</a></li>
+          <li><a href="#">Terlaris</a></li>
+          <li><a href="#">Flash Sale</a></li>
+          <li><a href="#">Brand</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Bantuan</div>
+        <ul class="footer-links">
+          <li><a href="#">Cara Pemesanan</a></li>
+          <li><a href="#">Pengiriman</a></li>
+          <li><a href="#">Retur & Refund</a></li>
+          <li><a href="#">Kontak Kami</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Perusahaan</div>
+        <ul class="footer-links">
+          <li><a href="#">Tentang Kami</a></li>
+          <li><a href="#">Karir</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Partner</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 LunaStore. Hak cipta dilindungi.</div>
+      <div style="display:flex;gap:12px;font-size:1.3rem;">💳 🏦 💰 📱</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── CART SIDEBAR ─── -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <div class="cart-title">🛒 Keranjang Saya</div>
+    <button class="modal-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total Pembayaran</span>
+      <span class="cart-total-val" id="cartTotal">Rp 0</span>
+    </div>
+    <button class="btn-checkout" onclick="checkout()">Lanjutkan Pembayaran →</button>
+  </div>
+</div>
+
+<!-- ─── PRODUCT MODAL ─── -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div id="modalCategory" class="product-category-small"></div>
+        <h2 id="modalName" style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-top:4px;"></h2>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-img-wrap"><span id="modalEmoji"></span></div>
+      <div class="product-rating">
+        <span class="stars" id="modalStars"></span>
+        <span class="rating-num" id="modalRating"></span>
+        <span class="rating-count" id="modalRatingCount"></span>
+      </div>
+      <div class="modal-price-row">
+        <div class="modal-price" id="modalPrice"></div>
+        <div class="modal-price-old" id="modalPriceOld"></div>
+      </div>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="review-section">
+        <div class="review-title">⭐ Ulasan Pembeli</div>
+        <div id="modalReviews"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-wishlist-full" onclick="toggleWishlistModal()">🤍</button>
+        <button class="btn-cart-full" onclick="addToCartFromModal()">🛒 Tambah ke Keranjang</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── LOGIN MODAL ─── -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;">Selamat Datang 👋</h2>
+      <button class="modal-close" onclick="closeLoginModal()">✕</button>
+    </div>
+    <div class="modal-body" style="padding-top:12px;">
+      <div class="login-tabs">
+        <div class="login-tab active" onclick="switchTab('login', this)">Masuk</div>
+        <div class="login-tab" onclick="switchTab('register', this)">Daftar</div>
+        <div class="login-tab" onclick="switchTab('admin', this)">Admin</div>
+      </div>
+      <div id="loginForm">
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="email@kamu.com" /></div>
+        <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••" /></div>
+        <button class="btn-cart-full" style="width:100%;padding:13px;" onclick="loginUser()">Masuk Sekarang →</button>
+      </div>
+      <div id="registerForm" style="display:none;">
+        <div class="form-group"><label class="form-label">Nama Lengkap</label><input class="form-input" type="text" placeholder="Nama kamu" /></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="email@kamu.com" /></div>
+        <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Min. 8 karakter" /></div>
+        <button class="btn-cart-full" style="width:100%;padding:13px;" onclick="registerUser()">Buat Akun Gratis →</button>
+      </div>
+      <div id="adminForm" style="display:none;">
+        <div style="background:var(--bg3);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:0.82rem;color:var(--text2);">🔐 Akses khusus administrator sistem</div>
+        <div class="form-group"><label class="form-label">Username Admin</label><input class="form-input" type="text" placeholder="admin" /></div>
+        <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••" /></div>
+        <button class="btn-cart-full" style="width:100%;padding:13px;background:linear-gradient(135deg,#0F2F8A,#2553E8);" onclick="loginAdmin()">Masuk Admin →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOAST ─── -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ─── SCROLL TOP ─── -->
+<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ══════════════════════════════════════════
+//  DATA — products.json (embedded)
+// ══════════════════════════════════════════
+const PRODUCTS_DATA = [
+  { id:1, name:"iPhone 15 Pro Max", category:"Elektronik", emoji:"📱", price:21999000, oldPrice:24999000, rating:4.9, reviews:2341, sold:8932, isNew:false, isHot:true, isSale:true, desc:"Smartphone flagship Apple dengan chip A17 Pro, kamera 48MP, layar Super Retina XDR 6.7 inci, dan titanium body yang ringan namun kokoh.", tags:["Gratis Case","Garansi 1 Tahun"] },
+  { id:2, name:"Samsung Galaxy S24 Ultra", category:"Elektronik", emoji:"📲", price:19499000, oldPrice:22000000, rating:4.8, reviews:1876, sold:6234, isNew:false, isHot:true, isSale:true, desc:"Ponsel Android terkuat dengan S Pen terintegrasi, kamera 200MP, dan AI Galaxy fitur canggih.", tags:["S Pen Included"] },
+  { id:3, name:"MacBook Pro M3 14\"", category:"Komputer", emoji:"💻", price:28999000, oldPrice:null, rating:4.9, reviews:987, sold:3421, isNew:true, isHot:false, isSale:false, desc:"Laptop profesional dengan chip M3, layar Liquid Retina XDR, baterai 18 jam, performa luar biasa.", tags:["Garansi 2 Tahun"] },
+  { id:4, name:"Sony WH-1000XM5", category:"Audio", emoji:"🎧", price:4299000, oldPrice:5499000, rating:4.8, reviews:3102, sold:12043, isNew:false, isHot:true, isSale:true, desc:"Headphone over-ear dengan noise cancelling terbaik di kelasnya, baterai 30 jam, dan suara Hi-Res Audio.", tags:["ANC Premium"] },
+  { id:5, name:"Nike Air Jordan 1 Retro", category:"Fashion", emoji:"👟", price:2850000, oldPrice:3200000, rating:4.7, reviews:4521, sold:18923, isNew:false, isHot:true, isSale:true, desc:"Sepatu ikonik Nike dengan desain klasik, sole Air cushioning, dan upper kulit premium. Limited edition.", tags:["Original","Limited"] },
+  { id:6, name:"Dyson V15 Detect", category:"Rumah", emoji:"🌀", price:8900000, oldPrice:10500000, rating:4.8, reviews:1203, sold:4231, isNew:false, isHot:false, isSale:true, desc:"Vacuum cordless dengan laser dust detection, motor digital Hyperdymium, dan sistem HEPA filtering.", tags:["Bebas Kabel"] },
+  { id:7, name:"iPad Pro M4 13\"", category:"Elektronik", emoji:"📟", price:17499000, oldPrice:null, rating:4.9, reviews:654, sold:2109, isNew:true, isHot:false, isSale:false, desc:"Tablet profesional paling tipis dari Apple dengan chip M4, OLED Ultra Retina XDR, dan Apple Pencil Pro.", tags:["Paling Tipis"] },
+  { id:8, name:"Levi's 501 Original", category:"Fashion", emoji:"👖", price:899000, oldPrice:1200000, rating:4.6, reviews:8932, sold:34521, isNew:false, isHot:false, isSale:true, desc:"Jeans ikonik Levi's dengan potongan straight fit, denim premium 100%, dan craftsmanship tahan lama.", tags:["100% Original"] },
+  { id:9, name:"Nespresso Vertuo Next", category:"Dapur", emoji:"☕", price:1850000, oldPrice:2200000, rating:4.7, reviews:2341, sold:9823, isNew:false, isHot:false, isSale:true, desc:"Mesin kopi premium dengan teknologi Centrifusion, membuat 5 ukuran kopi berbeda secara otomatis.", tags:["Barcode Reader"] },
+  { id:10, name:"Canon EOS R6 Mark II", category:"Kamera", emoji:"📷", price:42999000, oldPrice:null, rating:4.9, reviews:432, sold:876, isNew:true, isHot:true, isSale:false, desc:"Mirrorless profesional 40MP dengan AF Eye Tracking, video 6K RAW, dan stabilisasi IBIS 8 stop.", tags:["6K Video","Pro Grade"] },
+  { id:11, name:"AirPods Pro Gen 2", category:"Audio", emoji:"🎵", price:3499000, oldPrice:3999000, rating:4.8, reviews:5643, sold:21034, isNew:false, isHot:true, isSale:true, desc:"True wireless earbuds Apple dengan ANC H2 chip, Adaptive Audio, dan case MagSafe USB-C terbaru.", tags:["MagSafe","H2 Chip"] },
+  { id:12, name:"Uniqlo Ultra Light Down", category:"Fashion", emoji:"🧥", price:649000, oldPrice:799000, rating:4.5, reviews:12043, sold:45230, isNew:false, isHot:false, isSale:true, desc:"Jaket ultralight dengan fill power 640, dapat dilipat kecil, hangat namun sangat ringan untuk dibawa.", tags:["Ultra Light"] },
+  { id:13, name:"PlayStation 5 Slim", category:"Gaming", emoji:"🎮", price:8299000, oldPrice:8999000, rating:4.9, reviews:3421, sold:7891, isNew:true, isHot:true, isSale:true, desc:"Konsol gaming generasi terbaru Sony dengan SSD ultra-fast, ray tracing, dan DualSense haptic feedback.", tags:["Gen 5","4K Gaming"] },
+  { id:14, name:"Vitamix A3500i", category:"Dapur", emoji:"🥤", price:9900000, oldPrice:11000000, rating:4.8, reviews:876, sold:2341, isNew:false, isHot:false, isSale:true, desc:"Blender premium profesional dengan layar touch, 5 program otomatis, self-cleaning, dan motor 2.2HP.", tags:["Self-Cleaning"] },
+  { id:15, name:"Fossil Gen 6 Smartwatch", category:"Aksesori", emoji:"⌚", price:2999000, oldPrice:3500000, rating:4.5, reviews:1234, sold:5432, isNew:false, isHot:false, isSale:true, desc:"Smartwatch stylish Wear OS dengan GPS, heart rate monitor, notifikasi pintar, dan baterai 24 jam.", tags:["Wear OS"] },
+  { id:16, name:"Logitech MX Master 3S", category:"Komputer", emoji:"🖱️", price:1350000, oldPrice:1599000, rating:4.8, reviews:4532, sold:15234, isNew:false, isHot:false, isSale:true, desc:"Mouse wireless ergonomis dengan scroll magnetik ultra-fast, 8K DPI sensor, dan koneksi multi-device.", tags:["Ergonomis","8K DPI"] },
+];
+
+const CATEGORIES = ["Semua", ...new Set(PRODUCTS_DATA.map(p => p.category))];
+const REVIEWS_POOL = [
+  { name:"Aldi S.", text:"Produk sangat bagus, sesuai deskripsi. Pengiriman cepat dan packing aman!", stars:5 },
+  { name:"Dewi R.", text:"Kualitas premium banget, worth it untuk harganya. Sudah beli 2x.", stars:5 },
+  { name:"Fajar P.", text:"Bagus tapi agak lama pengirimannya. Overall masih puas.", stars:4 },
+  { name:"Sarah M.", text:"Top! Persis seperti di foto. Seller ramah dan responsif.", stars:5 },
+  { name:"Budi T.", text:"Rekomendasi banget, sudah pakai 2 minggu masih oke.", stars:5 },
+];
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let cart = JSON.parse(localStorage.getItem('luna_cart') || '[]');
+let wishlist = new Set(JSON.parse(localStorage.getItem('luna_wishlist') || '[]'));
+let currentCategory = "Semua";
+let currentSort = "default";
+let currentProduct = null;
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderCategories();
+  renderProducts();
+  renderHeroCards();
+  updateCartUI();
+  window.addEventListener('scroll', () => {
+    document.getElementById('scrollTopBtn').classList.toggle('visible', window.scrollY > 400);
+  });
+});
+
+// ══════════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════════
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+}
+
+// ══════════════════════════════════════════
+//  HERO CARDS
+// ══════════════════════════════════════════
+function renderHeroCards() {
+  const top3 = [...PRODUCTS_DATA].sort((a,b) => b.sold - a.sold).slice(0,3);
+  const wrap = document.getElementById('heroVisual');
+  wrap.innerHTML = top3.map((p,i) => `
+    <div class="hero-card" style="${i===0?'grid-column:1/-1':''}">
+      <div class="hero-card-img">${p.emoji}</div>
+      <div class="prod-name">${p.name}</div>
+      <div class="prod-price">${formatPrice(p.price)}</div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════
+//  CATEGORIES
+// ══════════════════════════════════════════
+function renderCategories() {
+  const icons = { Semua:"🌟", Elektronik:"📱", Komputer:"💻", Audio:"🎧", Fashion:"👗", Rumah:"🏠", Dapur:"🍳", Kamera:"📷", Gaming:"🎮", Aksesori:"⌚" };
+  document.getElementById('categoryPills').innerHTML = CATEGORIES.map(cat => `
+    <button class="cat-pill ${cat === currentCategory ? 'active' : ''}" onclick="selectCategory('${cat}')">
+      ${icons[cat] || '📦'} ${cat}
+    </button>
+  `).join('');
+}
+
+function selectCategory(cat) {
+  currentCategory = cat;
+  renderCategories();
+  renderProducts();
+}
+
+// ══════════════════════════════════════════
+//  SORT + FILTER
+// ══════════════════════════════════════════
+function sortProducts(type, btn) {
+  currentSort = type;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+function filterProducts() { renderProducts(); }
+
+function getFilteredProducts() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let list = PRODUCTS_DATA.filter(p => {
+    const matchCat = currentCategory === 'Semua' || p.category === currentCategory;
+    const matchQ = !q || p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+  switch(currentSort) {
+    case 'terlaris':   list.sort((a,b) => b.sold - a.sold); break;
+    case 'terpopuler': list.sort((a,b) => b.rating*b.reviews - a.rating*a.reviews); break;
+    case 'termurah':   list.sort((a,b) => a.price - b.price); break;
+    case 'termahal':   list.sort((a,b) => b.price - a.price); break;
+    case 'terbaru':    list = list.filter(p => p.isNew).concat(list.filter(p => !p.isNew)); break;
+  }
+  return list;
+}
+
+// ══════════════════════════════════════════
+//  RENDER PRODUCTS
+// ══════════════════════════════════════════
+function renderProducts() {
+  const products = getFilteredProducts();
+  document.getElementById('resultCount').textContent = `${products.length} produk`;
+  if (!products.length) {
+    document.getElementById('productsGrid').innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text3);">
+        <div style="font-size:3rem;margin-bottom:12px;">🔍</div>
+        <div style="font-size:1.1rem;font-weight:600;color:var(--text2);">Produk tidak ditemukan</div>
+        <div style="font-size:0.88rem;margin-top:6px;">Coba kata kunci lain atau pilih kategori berbeda</div>
+      </div>`;
+    return;
+  }
+  document.getElementById('productsGrid').innerHTML = products.map(p => renderCard(p)).join('');
+}
+
+function renderCard(p) {
+  const starsHtml = renderStars(p.rating);
+  const discount = p.oldPrice ? Math.round((1 - p.price/p.oldPrice)*100) : 0;
+  const inWishlist = wishlist.has(p.id);
+  return `
+  <div class="product-card" onclick="openProduct(${p.id})">
+    <div class="product-img-wrap">
+      <div class="product-img-bg"></div>
+      <span class="product-emoji">${p.emoji}</span>
+      <div class="product-badges">
+        ${p.isHot ? '<span class="badge-tag badge-hot">🔥 HOT</span>' : ''}
+        ${p.isNew ? '<span class="badge-tag badge-new">✨ BARU</span>' : ''}
+        ${p.isSale && discount>0 ? `<span class="badge-tag badge-sale">-${discount}%</span>` : ''}
+      </div>
+      <button class="wishlist-btn ${inWishlist?'active':''}" onclick="toggleWishlist(event,${p.id})">
+        ${inWishlist ? '❤️' : '🤍'}
+      </button>
+      <div class="card-actions">
+        <button class="btn-cart-full" style="flex:1;padding:9px;font-size:0.82rem;" onclick="addToCart(event,${p.id})">🛒 Keranjang</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="product-category-small">${p.category}</div>
+      <div class="product-name">${p.name}</div>
+      <div class="product-rating">
+        <span class="stars">${starsHtml}</span>
+        <span class="rating-num">${p.rating}</span>
+        <span class="rating-count">(${p.reviews.toLocaleString('id')})</span>
+      </div>
+      <div class="product-price-row">
+        <div>
+          <span class="product-price">${formatPrice(p.price)}</span>
+          ${p.oldPrice ? `<span class="product-price-old">${formatPrice(p.oldPrice)}</span>` : ''}
+        </div>
+        <div class="product-sold">${(p.sold/1000).toFixed(1)}rb terjual</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderStars(rating) {
+  return [1,2,3,4,5].map(i => i <= Math.round(rating) ? '★' : '☆').join('');
+}
+
+// ══════════════════════════════════════════
+//  PRODUCT MODAL
+// ══════════════════════════════════════════
+function openProduct(id) {
+  const p = PRODUCTS_DATA.find(x => x.id === id);
+  if (!p) return;
+  currentProduct = p;
+  document.getElementById('modalCategory').textContent = p.category;
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalEmoji').textContent = p.emoji;
+  document.getElementById('modalStars').textContent = renderStars(p.rating);
+  document.getElementById('modalRating').textContent = p.rating;
+  document.getElementById('modalRatingCount').textContent = `(${p.reviews.toLocaleString('id')} ulasan)`;
+  document.getElementById('modalPrice').textContent = formatPrice(p.price);
+  const old = document.getElementById('modalPriceOld');
+  old.textContent = p.oldPrice ? formatPrice(p.oldPrice) : '';
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalMeta').innerHTML = `
+    <div class="meta-item"><span class="meta-label">Terjual</span><span class="meta-val">${p.sold.toLocaleString('id')}</span></div>
+    <div class="meta-item"><span class="meta-label">Stok</span><span class="meta-val" style="color:var(--green)">Tersedia</span></div>
+    <div class="meta-item"><span class="meta-label">Garansi</span><span class="meta-val">Resmi</span></div>
+    ${p.tags.map(t=>`<div class="meta-item"><span class="meta-label">Tag</span><span class="meta-val">${t}</span></div>`).join('')}
+  `;
+  const revs = REVIEWS_POOL.slice(0,3).map(r => `
+    <div class="review-item">
+      <div class="review-avatar">${r.name[0]}</div>
+      <div>
+        <div class="review-name">${r.name} <span class="stars" style="font-size:0.75rem;">★★★★★</span></div>
+        <div class="review-text">${r.text}</div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('modalReviews').innerHTML = revs;
+  document.getElementById('productModal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('productModal').classList.remove('open'); currentProduct = null; }
+document.getElementById('productModal').addEventListener('click', e => { if(e.target === document.getElementById('productModal')) closeModal(); });
+
+function addToCartFromModal() {
+  if (!currentProduct) return;
+  addToCartById(currentProduct.id);
+  closeModal();
+}
+
+// ══════════════════════════════════════════
+//  CART
+// ══════════════════════════════════════════
+function addToCart(e, id) { e.stopPropagation(); addToCartById(id); }
+
+function addToCartById(id) {
+  const p = PRODUCTS_DATA.find(x => x.id === id);
+  const existing = cart.find(c => c.id === id);
+  if (existing) existing.qty++;
+  else cart.push({ id: p.id, name: p.name, emoji: p.emoji, price: p.price, qty: 1 });
+  saveCart();
+  updateCartUI();
+  showToast(`✅ ${p.name} ditambahkan ke keranjang!`, 'success');
+}
+
+function saveCart() { localStorage.setItem('luna_cart', JSON.stringify(cart)); }
+
+function updateCartUI() {
+  const total = cart.reduce((s,c) => s+c.qty, 0);
+  const badge = document.getElementById('cartBadge');
+  badge.style.display = total ? 'flex' : 'none';
+  badge.textContent = total;
+  renderCartBody();
+}
+
+function renderCartBody() {
+  const body = document.getElementById('cartBody');
+  if (!cart.length) {
+    body.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><div style="font-weight:600;color:var(--text2)">Keranjang masih kosong</div><div style="font-size:0.82rem;margin-top:6px;">Yuk mulai belanja!</div></div>`;
+    document.getElementById('cartTotal').textContent = 'Rp 0';
+    return;
+  }
+  body.innerHTML = cart.map(c => `
+    <div class="cart-item">
+      <div class="cart-item-img">${c.emoji}</div>
+      <div style="flex:1;">
+        <div class="cart-item-name">${c.name}</div>
+        <div class="cart-item-price">${formatPrice(c.price)}</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button>
+          <span class="qty-num">${c.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${c.id},1)">+</button>
+        </div>
+      </div>
+      <span class="cart-remove" onclick="removeCartItem(${c.id})">🗑️</span>
+    </div>
+  `).join('');
+  const total = cart.reduce((s,c) => s+c.price*c.qty, 0);
+  document.getElementById('cartTotal').textContent = formatPrice(total);
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
+  saveCart(); updateCartUI();
+}
+
+function removeCartItem(id) {
+  cart = cart.filter(c => c.id !== id);
+  saveCart(); updateCartUI();
+}
+
+function openCart() { document.getElementById('cartSidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); }
+function closeCart() { document.getElementById('cartSidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); }
+
+function checkout() {
+  if (!cart.length) { showToast('⚠️ Keranjang kamu masih kosong!', 'info'); return; }
+  showToast('🎉 Terima kasih! Pesanan kamu sedang diproses.', 'success');
+  cart = []; saveCart(); updateCartUI(); closeCart();
+}
+
+// ══════════════════════════════════════════
+//  WISHLIST
+// ══════════════════════════════════════════
+function toggleWishlist(e, id) {
+  e.stopPropagation();
+  if (wishlist.has(id)) { wishlist.delete(id); showToast('💔 Dihapus dari wishlist', 'info'); }
+  else { wishlist.add(id); showToast('❤️ Ditambahkan ke wishlist!', 'success'); }
+  localStorage.setItem('luna_wishlist', JSON.stringify([...wishlist]));
+  renderProducts();
+}
+function toggleWishlistModal() {
+  if (!currentProduct) return;
+  toggleWishlist({ stopPropagation: ()=>{} }, currentProduct.id);
+}
+function showWishlistToast() { showToast(`❤️ Wishlist kamu — ${wishlist.size} item`, 'info'); }
+
+// ══════════════════════════════════════════
+//  LOGIN MODAL
+// ══════════════════════════════════════════
+function openLoginModal() { document.getElementById('loginModal').classList.add('open'); }
+function closeLoginModal() { document.getElementById('loginModal').classList.remove('open'); }
+document.getElementById('loginModal').addEventListener('click', e => { if(e.target === document.getElementById('loginModal')) closeLoginModal(); });
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('adminForm').style.display = tab === 'admin' ? 'block' : 'none';
+}
+
+function loginUser() {
+  closeLoginModal();
+  showToast('👋 Selamat datang kembali!', 'success');
+  document.querySelector('.btn-login').textContent = '👤 Profil';
+}
+function registerUser() {
+  closeLoginModal();
+  showToast('🎉 Akun berhasil dibuat! Selamat datang di LunaStore.', 'success');
+  document.querySelector('.btn-login').textContent = '👤 Profil';
+}
+function loginAdmin() {
+  closeLoginModal();
+  showToast('🔐 Masuk sebagai Admin — redirect ke dashboard…', 'info');
+  setTimeout(() => { window.location.href = 'admin.html'; }, 1500);
+}
+
+// ══════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════
+function formatPrice(p) { return 'Rp ' + p.toLocaleString('id-ID'); }
+
+function scrollToProducts() { document.getElementById('productsSection').scrollIntoView({ behavior:'smooth' }); }
+
+function showToast(msg, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = msg;
+  container.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(10px)'; setTimeout(() => el.remove(), 300); }, 3000);
+}
+</script>
+</body>
+</html>
